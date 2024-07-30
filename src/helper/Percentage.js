@@ -10,6 +10,11 @@ function Percentage(array_cost, array_names) {
         return null;
     }
 
+    //check if total_costs was successful
+    if (total_costs == null) {
+        return null;
+    }
+
     //Generate percentages of total cost and place in object
     for (let index = 0; index < array.length; index++) {
         temp = (array_cost[index] / total_costs) * 100;

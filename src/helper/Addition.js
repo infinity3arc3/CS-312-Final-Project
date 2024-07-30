@@ -9,8 +9,14 @@ function Addition(array) {
 
     //Make array only have numbers
     if (boolean == false) {
-        for (let index = 0; index < array.length; index++) {
-            number_array[index] = Number(number_array[index]);
+        try{
+            for (let index = 0; index < array.length; index++) {
+                number_array[index] = Number(number_array[index]);
+            }
+        }
+
+        catch {
+            return null;
         }
     }
 

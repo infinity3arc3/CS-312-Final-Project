@@ -21,3 +21,7 @@ pie charts and other analysis views based on percentages. Returns an object with
 properties mirroring the array_names and values of percentages totaling 100. Time
 complexity O(n). Returns null if the arrays are not equal in length. Relies on
 Addition.js for finding total cost of all in array_cost.
+
+Timeperiod.js - 
+
+
