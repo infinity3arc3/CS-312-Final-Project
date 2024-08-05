@@ -1,5 +1,5 @@
-async function Query(modelname) {
-    const foundArray = await modelname.find({}).exec();
+async function Query(modelname, query={}) {
+    const foundArray = await modelname.find(query).exec();
     return foundArray;
 }
 

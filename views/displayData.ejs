@@ -39,7 +39,7 @@
                                 <td><%= newListItems[i].name %></td>
                                 <td><%= newListItems[i].value %></td>
                                 <td><%= newListItems[i].category %></td>
-                                <td><%= newListItems[i].Date %></td>
+                                <td><%= new Date(Number(newListItems[i].Date)).toLocaleDateString("en-US", {weekday: "long",day: "numeric",month: "long"}) %></td>
                         </tr>
                         <% } %>
                     </tbody>

@@ -1,20 +1,27 @@
 async function Create(Project, nameIn, valueIn, categoryIn, period) {
     try {
+        // let today = new Date();
+
+        // let options = {
+        //     weekday: "long",
+        //     day: "numeric",
+        //     month: "long"
+        // };
+
+        // let day = today.toLocaleDateString("en-US", options);
+
+        //ms -> s
         let today = new Date();
 
-        let options = {
-            weekday: "long",
-            day: "numeric",
-            month: "long"
-        };
+        today.setHours(0,0,0,0);
 
-        let day = today.toLocaleDateString("en-US", options);
+        todayTimestamp = today.valueOf();
 
         const project = new Project ({ 
             name: nameIn,
             value: valueIn,
             category: categoryIn,
-            Date: String(day),
+            Date: todayTimestamp,
             periodicity: period
         });
 

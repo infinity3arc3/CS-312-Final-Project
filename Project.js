@@ -2,7 +2,7 @@
 
 //Database
 const mongoose = require("mongoose");
-const url = ""; //replace with your own
+const url = "mongodb+srv://gmc327:XkbeIuWKD0rQkN9J@cluster0.aufu7kz.mongodb.net/ExpenseTracker?retryWrites=true&w=majority&appName=Cluster0"; //replace with your own
 mongoose.connect(url);
 const projectSchema = new mongoose.Schema({
     name: String,
@@ -23,7 +23,7 @@ const period = require(__dirname + "\\src\\helper\\Timeperiod.cjs");
 const create = require(__dirname + "\\src\\database\\Create.cjs");
 const query = require(__dirname + "\\src\\database\\Read.cjs");
 const remove = require(__dirname + "\\src\\database\\Delete.cjs");
-//const update = require(__dirname + "\\src\\database\\Update.cjs");
+const update = require(__dirname + "\\src\\database\\Update.cjs");
 
 //general requirements
 const express = require("express");
@@ -48,7 +48,40 @@ app.get("/enterData", function(req, res) {
 
 app.get("/displayData", async(req, res) => {
     //retrieve database information
-    const databaseEntries = await query.Query(Project);
+
+    //update all dates to next due date after today
+    const allItems = await query.Query(Project);
+
+    for (var i = 0; i<allItems.length; i++) {
+        if(allItems[i].Date < Date.now())
+        {
+            update.Update(Project, {_id: allItems[i]._id}, {Date: period.Period(allItems[i].Date, allItems[i].periodicity)})
+        }
+    }
+
+    let today = new Date();
+
+    today.setHours(0,0,0,0);
+
+    let todayTimestamp = today.valueOf();
+
+    // let searchQuery = {
+    //     Date:{ $gte:todayTimestamp},
+    //     category: "housing"
+    // }
+
+    let oneWeek = today.setDate(today.getDate()+7)
+    let oneMonth = today.setMonth(today.getMonth()+1)
+
+    let oneWeekTimestamp = oneWeek.valueOf();
+    let oneMonthTimestamp = oneMonth.valueOf();
+
+    let searchQuery = {
+            // $and:[{Date:{$gte: todayTimestamp}}, {Date:{$lte: oneWeek}}],
+            // category: "transportation"
+        }
+
+    const databaseEntries = await query.Query(Project,searchQuery);
 
     //calculate total cost
     const costArray = [];
