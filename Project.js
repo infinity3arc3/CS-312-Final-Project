@@ -22,7 +22,7 @@ const period = require(__dirname + "\\src\\helper\\Timeperiod.cjs");
 //CRUD
 const create = require(__dirname + "\\src\\database\\Create.cjs");
 const query = require(__dirname + "\\src\\database\\Read.cjs");
-//const remove = require(__dirname + "\\src\\database\\Delete.cjs");
+const remove = require(__dirname + "\\src\\database\\Delete.cjs");
 //const update = require(__dirname + "\\src\\database\\Update.cjs");
 
 //general requirements
@@ -64,6 +64,7 @@ app.get("/displayData", async(req, res) => {
 app.post("/", function(req, res) {
     var operation = Number(req.body.boa);
 
+    //Create
     if (operation == 0) {
         console.log("here");
 
@@ -93,6 +94,16 @@ app.post("/", function(req, res) {
 
             res.redirect("http://localhost:3000/displayData");
         }
+    }
+
+    //Delete
+    else if (operation == 1) {
+        const toPurge = req.body.selectedItem;
+        console.log(req.body.selectedItem);
+
+        remove.Delete(Project, toPurge);
+
+        res.redirect("http://localhost:3000/");
     }
 });
 

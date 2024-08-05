@@ -20,7 +20,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width:100px">Select          </th>
+                            <th style="width:100px">Delete         </th>
                             <th style="width:100px">Frequency           </th>
                             <th style="width:250px">Name                </th>
                             <th style="width:100px">Amount ($)          </th>
@@ -31,7 +31,10 @@
                     <tbody id="expenseTableBody">
                         <tr>
                             <% for (var i = 0; i<newListItems.length; i++) { %>
-                                <td><input type="checkbox" name="selectedItems" value="<%= newListItems[i]._id %>" <%= newListItems[i].checked ? 'checked' : '' %>></td>
+                                <form action="/" method="POST">
+                                    <td><input type="checkbox" id="selectedItem" name="selectedItem" value="<%= newListItems[i]._id %>" onchange="this.form.submit()"></td>
+                                    <input type="hidden" name="boa" value="1">
+                                </form>
                                 <td><%= newListItems[i].periodicity %></td>
                                 <td><%= newListItems[i].name %></td>
                                 <td><%= newListItems[i].value %></td>
