@@ -1,0 +1,72 @@
+<%- include("Header") -%>
+<body>
+    <header>
+        <div class="container">
+            <h1>Expense Tracker</h1>
+            <nav>
+                <ul>
+                    <li><a href="http://localhost:3000/">Home</a></li>
+                    <li><a href="http://localhost:3000/enterData">Expense Tracker</a></li>
+                    <li><a href="http://localhost:3000/displayData">Expense Data</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="expense-input">
+            <div class="container">
+                <h2>Enter Your Expense</h2>
+                <form id="expenseForm" action = "/" method = "post">
+                    <div class="form-group">
+                        <label for="frequency">Frequency:</label>
+                        <select id="frequency" name="frequency" required>
+                            <option value="singletime">Single-Time</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount ($):</label>
+                        <input type="number" id="amount" name="amount" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Name">Name:</label>
+                        <input type="" id="name" name="name" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" required>
+                            <option value="housing">Housing</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="food">Food</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="personal-care">Personal Care</option>
+                            <option value="education">Education</option>
+                            <option value="savings-investments">Savings and Investments</option>
+                            <option value="debt-repayment">Debt Repayment</option>
+                            <option value="insurance">Insurance</option>
+                            <option value="gifts-donations">Gifts and Donations</option>
+                            <option value="miscellaneous">Miscellaneous</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" name = "submit">Submit</button>
+                    <input type="hidden" name="boa" value="0">
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Budget Buddy</p>
+        </div>
+    </footer>
+</body>
+</html>

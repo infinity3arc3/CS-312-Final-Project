@@ -1,0 +1,60 @@
+<%- include("Header") -%>
+<body>
+    <header>
+        <div class="container">
+            <h1>Expense Data</h1>
+            <nav>
+                <ul>
+                    <li><a href="http://localhost:3000/">Home</a></li>
+                    <li><a href="http://localhost:3000/enterData">Expense Tracker</a></li>
+                    <li><a href="http://localhost:3000/displayData">Expense Data</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="expense-display">
+            <div class="container">
+                <h2>All Expenses</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:100px">Select          </th>
+                            <th style="width:100px">Frequency           </th>
+                            <th style="width:250px">Name                </th>
+                            <th style="width:100px">Amount ($)          </th>
+                            <th style="width:150px">Category            </th>
+                            <th style="width:100px">Date                </th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenseTableBody">
+                        <tr>
+                            <% for (var i = 0; i<newListItems.length; i++) { %>
+                                <td><input type="checkbox" name="selectedItems" value="<%= newListItems[i]._id %>" <%= newListItems[i].checked ? 'checked' : '' %>></td>
+                                <td><%= newListItems[i].periodicity %></td>
+                                <td><%= newListItems[i].name %></td>
+                                <td><%= newListItems[i].value %></td>
+                                <td><%= newListItems[i].category %></td>
+                                <td><%= newListItems[i].Date %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2"><strong>Total Amount:</strong></td>
+                            <td id="totalAmount"><%= total %></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Budget Buddy</p>
+        </div>
+    </footer>
+</body>
+</html>
