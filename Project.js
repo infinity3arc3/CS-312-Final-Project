@@ -2,7 +2,7 @@
 
 //Database
 const mongoose = require("mongoose");
-const url = "mongodb+srv://gmc327:XkbeIuWKD0rQkN9J@cluster0.aufu7kz.mongodb.net/ExpenseTracker?retryWrites=true&w=majority&appName=Cluster0"; //replace with your own
+const url = ""; //replace with your own
 mongoose.connect(url);
 const projectSchema = new mongoose.Schema({
     name: String,
