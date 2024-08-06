@@ -22,5 +22,5 @@ module.exports.Period = function (oldDate, period) {
             default:
                 break;
         }
-        return Number(newDate.setDate(newDate.getDate() + 1))
+        return Number(Date.parse(newDate))
 }
