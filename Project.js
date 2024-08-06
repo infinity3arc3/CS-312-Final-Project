@@ -32,6 +32,9 @@ const request = require("request");
 const https = require("https");
 const app = express();
 const rp = require('request-promise');
+const fs = require("fs");
+const generateGraph = require("./generateGraph");
+const moment = require("moment");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
@@ -65,10 +68,10 @@ app.get("/displayData", async(req, res) => {
 
     let todayTimestamp = today.valueOf();
 
-    // let searchQuery = {
-    //     Date:{ $gte:todayTimestamp},
-    //     category: "housing"
-    // }
+     //let searchQuery = {
+         //Date:{ $gte:todayTimestamp},
+         //category: "housing"
+     //}
 
     let oneWeek = today.setDate(today.getDate()+7)
     let oneMonth = today.setMonth(today.getMonth()+1)
@@ -77,8 +80,8 @@ app.get("/displayData", async(req, res) => {
     let oneMonthTimestamp = oneMonth.valueOf();
 
     let searchQuery = {
-            // $and:[{Date:{$gte: todayTimestamp}}, {Date:{$lte: oneWeek}}],
-            // category: "transportation"
+             //$and:[{Date:{$gte: todayTimestamp}}, {Date:{$lte: oneWeek}}],
+             //category: "transportation"
         }
 
     const databaseEntries = await query.Query(Project,searchQuery);
@@ -89,6 +92,38 @@ app.get("/displayData", async(req, res) => {
         costArray.push(databaseEntries[i].value);
     }
     const total_cost = addition.Addition(costArray);
+
+    let data = databaseEntries.map(item => ({
+        Date: item.Date,
+        Category: item.category,
+        Value: item.value
+    }));
+
+    data.forEach(d => console.log(`Raw Date: ${d.Date}`));
+
+    data = data.map(d => {
+        const date = moment(Number(d.Date));
+        const month = date.format('MMM');
+        const year = date.format('YYYY');
+        return { ...d, Month: `${month}-${year}` };
+    });
+
+    data.forEach(d => console.log(`Parsed Date: ${d.Month}`));
+
+    // Group by month
+    const groupedData = data.reduce((acc, curr) => {
+        const month = curr.Month;
+        if (!acc[month]) acc[month] = 0;
+        acc[month] += curr.Value;
+        return acc;
+    }, {});
+
+    const graphData = Object.keys(groupedData).map(month => ({
+        Month: month,
+        Value: groupedData[month]
+    }));
+
+    generateGraph(graphData);
     
     //render
     res.render("displayData", {total: total_cost, newListItems: databaseEntries})
@@ -125,7 +160,7 @@ app.post("/", function(req, res) {
             //create a new database entry
             create.Create(Project, name, amount, category, frequency);
 
-            res.redirect("http://localhost:3000/displayData");
+            res.redirect("http://localhost:3000/enterData");
         }
     }
 
@@ -136,8 +171,56 @@ app.post("/", function(req, res) {
 
         remove.Delete(Project, toPurge);
 
-        res.redirect("http://localhost:3000/");
+        res.redirect("http://localhost:3000/displayData");
     }
+});
+
+app.post("/filterData", async (req, res) => {
+    const { startDate, endDate, category } = req.body;
+
+    const filterCriteria = {
+        Date: { $gte: new Date(startDate), $lte: new Date(endDate) }
+    };
+
+    if (category) {
+        filterCriteria.category = category;
+    }
+
+    const filteredItems = await Project.find(filterCriteria);
+
+    let data = filteredItems.map(item => ({
+        Date: item.Date,
+        Category: item.category,
+        Value: item.value
+    }));
+
+    data.forEach(d => console.log(`Raw Date: ${d.Date}`));
+
+    data = data.map(d => {
+        const date = moment(Number(d.Date));
+        const month = date.format('MMM');
+        const year = date.format('YYYY');
+        return { ...d, Month: `${month}-${year}` };
+    });
+
+    data.forEach(d => console.log(`Parsed Date: ${d.Month}`));
+
+    // Group by month
+    const groupedData = data.reduce((acc, curr) => {
+        const month = curr.Month;
+        if (!acc[month]) acc[month] = 0;
+        acc[month] += curr.Value;
+        return acc;
+    }, {});
+
+    const graphData = Object.keys(groupedData).map(month => ({
+        Month: month,
+        Value: groupedData[month]
+    }));
+
+    generateGraph(graphData);
+
+    res.json({ success: true });
 });
 
 app.listen(process.env.PORT || 3000, function(){
